@@ -11,43 +11,40 @@ coords <- read.csv('https://raw.githubusercontent.com/willoutcault/608_final/mas
 ui <- fluidPage(theme = shinytheme("superhero"),
     
  #   shinythemes::themeSelector(),
-    
-    titlePanel(HTML("<h1><center><font size=14>Job Information (2020)</font></center></h1>")),
-    hr(),
-    fluidRow(
-        column(6, align="center",
-               textInput("job", "Search: ", value="", placeholder="Job Title, Skill, Industry")
-        ),
-        column(6, align="center",
-               textInput("location", "Location: ", value="", placeholder="City, State (i.e. 'Albany, NY'"),
-               actionButton("go", "Search")
-        )
-    ),
-    hr(),
-    
-    fluidRow(
-        leafletOutput("map")
-    ), 
-    
-    hr(),
-    
-    fluidRow(
-        column(4,
-               h4("Skills"),
-               plotOutput("plot1"),
-               
-        ),
-        column(4,
-               h4("Wage"),
-               plotOutput("plot2"),
-        ),
-        column(4,
-               h4("Location"),
-               plotOutput("plot3"),
+    navbarPage(
+        title="Job Board",
+        id="nav",
+        sidebarLayout(
+            sidebarPanel(
+                textInput("job", "Job Title: ", value="", placeholder="Job Title, Skill, Industry"),
+                tags$hr(),
+                textInput("location", "Location: ", value="", placeholder="City, State (i.e. 'Albany, NY')"),
+                actionButton("go", "Search")
+            ),
+            mainPanel(
+                leafletOutput("map"),
+                hr(),
+                fluidRow(
+                    column(4,
+                           h4("Skills"),
+                           plotOutput("plot1"),
+                    ),
+                    column(4,
+                           h4("Wage"),
+                           plotOutput("plot2"),
+                    ),
+                    column(4,
+                           h4("Location"),
+                           plotOutput("plot3"),
+                    )
+                )
+                
+            )             
         )
     )
-    
 )
+
+
 
 
 server <- function(input,output){
