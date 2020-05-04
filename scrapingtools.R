@@ -19,39 +19,25 @@ skillscrape <- function(job,city){
     urls <- list()
     
     #### Counting Loops
-    main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc, sep = ""))
-    count <- main_page %>% 
-        html_nodes("div#job-count.col.b.dark-blue-text") %>% 
-        html_text()
-    count <- as.numeric(as.character(str_remove_all(count, "[^[:digit:]]")))
-    loop_count <- round(count/25)
-    if (loop_count > 1){
-        loop_count <- 1
-    }
-    for (i in 1:loop_count){
-        try(main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc,"&page_number=",i, sep = "")))
-        
-        ##### URLS
-        url <- main_page %>% 
-            html_nodes("a.data-results-content.block.job-listing-item") %>% 
-            html_attr("href")
-        urls <- append(urls, url)
-    }
-    closeAllConnections()
+    main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc, sep = "")))
+
+    ##### URLS
+    url <- main_page %>% 
+        html_nodes("a.data-results-content.block.job-listing-item") %>% 
+        html_attr("href")
+    urls <- append(urls, url)
     
     
     #### Append Skills
-    
     for (i in 1:length(urls)){
-        try(job_posting <- read_html(paste("https://www.careerbuilder.com",urls[[i]],sep="")))
-        try(append_df[i,1] <- job)
-        try(skills <- list(job_posting %>% 
+        job_posting <- read_html(paste("https://www.careerbuilder.com",urls[[i]],sep=""))
+        append_df[i,1] <- job
+        skills <- list(job_posting %>% 
                            html_nodes(".check-bubble") %>% 
                            html_text()))
-        try(append_df[i,2] <- list(skills))
-        closeAllConnections()
+        try(append_df[i,2] <- list(skills)
     }
-    
+    closeAllConnections()
     new_df <- rbind(new_df, append_df)
     
     ###### CLEANING
