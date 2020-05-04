@@ -224,9 +224,9 @@ count_location <- function(df){
 }
 
 get_lon <- function(hascoords, needscoords){
-    needscoords$lon <- hascoords$lon[cbind(
+    needscoords$lng <- hascoords$lng[cbind(
         match(tolower(needscoords$Location), tolower(hascoords$Location)))]
-    return(needscoords$lon)
+    return(needscoords$lng)
 }
 get_lat <- function(hascoords, needscoords){
     needscoords$lat <- hascoords$lat[cbind(
