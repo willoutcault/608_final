@@ -19,7 +19,7 @@ skillscrape <- function(job,city){
     urls <- list()
     
     #### Counting Loops
-    main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc, sep = "")))
+    main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc, sep = ""))
 
     ##### URLS
     url <- main_page %>% 
