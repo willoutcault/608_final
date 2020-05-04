@@ -27,12 +27,11 @@ skillscrape <- function(job,city){
     loop_count <- round(count/25)
     if (loop_count > 2){
         loop_count <- 2
-        
     }
     for (i in 1:loop_count){
         try(main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc,"&page_number=",i, sep = "")))
-    
-    ##### URLS
+        
+        ##### URLS
         url <- main_page %>% 
             html_nodes("a.data-results-content.block.job-listing-item") %>% 
             html_attr("href")
@@ -43,7 +42,7 @@ skillscrape <- function(job,city){
     
     #### Append Skills
     
-    for (i in 1:length(urls){
+    for (i in 1:length(urls)){
         try(job_posting <- read_html(paste("https://www.careerbuilder.com",urls[[i]],sep="")))
         try(append_df[i,1] <- job)
         try(skills <- list(job_posting %>% 
