@@ -225,7 +225,7 @@ count_wages <- function(df){
 count_location <- function(df){
     Locations <- df %>%
         count(Location) %>%
-        filter(Location != "null" & Location != " " & Location != "" & Location != "Full Time" & Location != "Contractor")
+        filter(!is.na(Location) & Location != " " & Location != "" & Location != "Full Time" & Location != "Contractor")
     Locations <- Locations[with(Locations,order(-n)),]
     Locations <- Locations[1:10,]
     return(Locations)
