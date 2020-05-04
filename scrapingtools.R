@@ -209,7 +209,7 @@ count_skills <- function(df){
     skills <- filter(skills, complete.cases(skills))
     skills <- skills %>% 
         count(skills)
-#    skills <- skills[with(skills,order(-n)),]
+    skills <- skills[with(skills,order(-n)),]
 #    skills <- skills[1:10,]
     return(skills)
 }
@@ -226,6 +226,7 @@ count_location <- function(df){
     Locations <- df %>%
         count(Location) %>%
         filter(!is.na(Location) & Location != " " & Location != "" & Location != "Full Time" & Location != "Contractor")
+    skills <- skills[with(skills,order(-n)),]
     return(Locations)
 }
 
