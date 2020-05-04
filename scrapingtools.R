@@ -35,7 +35,7 @@ skillscrape <- function(job,city){
         skills <- list(job_posting %>% 
                            html_nodes(".check-bubble") %>% 
                            html_text()))
-        try(append_df[i,2] <- list(skills)
+        append_df[i,2] <- list(skills)
     }
     closeAllConnections()
     new_df <- rbind(new_df, append_df)
