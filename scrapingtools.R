@@ -222,3 +222,14 @@ count_location <- function(df){
     Locations <- Locations[1:10,]
     return(Locations)
 }
+
+get_lon <- function(df3){
+    df3$lon <- df$lon[cbind(
+        match(tolower(df3$Location), tolower(df$Location)))]
+    return(df3$lon)
+}
+get_lat <- function(df3){
+df3$lat <- df$lat[cbind(
+    match(tolower(df3$Location), tolower(df$Location)))]
+return(df3$lat)
+}
