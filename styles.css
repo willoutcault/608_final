@@ -26,8 +26,8 @@ div#search_bar.search_bar_panel {
   text-align: center;
 }
 
-button#go {
-  
+div#search_bar.search_bar_panel{
+  top:-110px;
 }
 
 h4 {
