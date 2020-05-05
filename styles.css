@@ -8,29 +8,12 @@ h1 {
   color: #ad1d28;
 }
 
-div.col-sm-12 {
-  border-radius: 0 0 50% 50%;
-  background-color:#dddddd;
-}
-
-#location.form-control.shiny-bound-input {
-  text-align: center;
-}
-
-#job.form-control.shiny-bound-input {
-  text-align: center;
-}
-
 h4 {
   font-family: 'Lobster', cursive;
   text-align: center;
   font-weight: 500;
   line-height: 1.1;
   color: #ad1d28;
-}
-
-body {
-  background-color: #fff;
 }
 
 
