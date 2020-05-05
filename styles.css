@@ -21,6 +21,9 @@ h4 {
   margin-bottom: 0px;
 }
 
+div.form-group {
+  margin-left:35%;
+
 div.col-sm-8 {
   width: 100%;
   background-color: transparent;
