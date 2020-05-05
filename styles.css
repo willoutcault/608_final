@@ -2,6 +2,7 @@
 
 h1 {
   font-family: 'Lobster', cursive;
+  margin-top: 5px;
   font-size: 42px;
   text-align: center;
   font-weight: 500;
@@ -21,6 +22,8 @@ h4 {
 }
 
 div.col-sm-8 {
+  width: 100%;
+  background-color: transparent;
 }
 
 div.col-sm-12 {
@@ -30,6 +33,9 @@ div.col-sm-12 {
   background-color: #dddddd;
   margin-left:30%;
   margin-right:30%;
+  padding-bottom:5%;
+  padding-right:5%;
+  padding-left:15%;
 }
 
 
