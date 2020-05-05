@@ -9,6 +9,15 @@ div.box-body {
   color: #ad1d28;
 }
 
+div.row {
+  width: 25%;
+}
+  
+div.form-control {
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
 h4 {
   font-family: 'Lobster', cursive;
   font-size: 30px;
