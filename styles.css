@@ -4,7 +4,6 @@ div.box-body {
   font-family: 'Lobster', cursive;
   margin-top: 5px;
   font-size: 42px;
-  text-align: center;
   font-weight: 500;
   line-height: 1.1;
   color: #ad1d28;
@@ -20,9 +19,6 @@ h4 {
   color: #ad1d28;
   margin-bottom: 0px;
 }
-
-div.form-group {
-  margin-left:35%;
 
 div.col-sm-6 {
   width: 40%;
@@ -42,9 +38,5 @@ div.col-sm-8 {
   padding-bottom:5%;
   padding-right:5%;
   padding-left:15%;
-}
-
-div.btn {
-  margin-left: 45%;
 }
 
