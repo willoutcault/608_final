@@ -27,6 +27,8 @@ div.col-sm-12 {
   border-bottom-left-radius: 110px;  /* 100px of height + 10px of border */
   border-bottom-right-radius: 110px;
   background-color: #dddddd;
+  margin-left:30%;
+  margin-right:30%;
 }
 
 
