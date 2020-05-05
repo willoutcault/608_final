@@ -9,7 +9,7 @@ h1 {
   color: #ad1d28;
 }
 
-#search_bar.search_bar_panel {
+div#search_bar.search_bar_panel {
   width: 100%;
   padding-top: 8%;
 }
