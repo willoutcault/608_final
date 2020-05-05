@@ -9,6 +9,20 @@ h1 {
   color: #ad1d28;
 }
 
+#search_bar {
+  width: 100%;
+  padding-top: 8%
+}
+
+.form-group.shiny-input-containter {
+  padding-top:
+   margin:auto
+}
+#locat
+ion, #job {
+  text-align: center;
+}
+
 body {
   background-color: #fff;
 }
