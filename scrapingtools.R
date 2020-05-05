@@ -1,54 +1,56 @@
 skillscrape <- function(job,city){
-    
-    start_time <- Sys.time()
-    
-    #### Initialize df
-    new_df <- data.frame(matrix(ncol = 2, nrow = 0))
-    x <- c("Query", "Skills")
-    colnames(new_df) <- x
-    
-    append_df <- data.frame(matrix(ncol = 2, nrow = 0))
-    x <- c("Query","Skills")
-    colnames(append_df) <- x
-    
-    search_job <- sub(" ", "+", job)
-    search_loc <- sub(",", "", city)
-    search_loc <- gsub(" ", "+", search_loc)
-    
-    #### Reading landingpage
-    urls <- list()
-    
-    #### Counting Loops
-    main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc, sep = ""))
-
-    ##### URLS
-    url <- main_page %>% 
-        html_nodes("a.data-results-content.block.job-listing-item") %>% 
-        html_attr("href")
-    urls <- append(urls, url)
-    
-    
-    #### Append Skills
-    for (i in 1:length(urls)){
-        job_posting <- read_html(paste("https://www.careerbuilder.com",urls[[i]],sep=""))
-        append_df[i,1] <- job
-        skills <- list(job_posting %>% 
-                           html_nodes(".check-bubble") %>% 
-                           html_text())
-        append_df[i,2] <- list(skills)
-    }
+  
+  start_time <- Sys.time()
+  
+  #### Initialize df
+  new_df <- data.frame(matrix(ncol = 3, nrow = 0))
+  x <- c("Query", "Skills", "urls")
+  colnames(new_df) <- x
+  
+  append_df <- data.frame(matrix(ncol = 3, nrow = 0))
+  x <- c("Query","Skills", "urls")
+  colnames(append_df) <- x
+  
+  search_job <- sub(" ", "+", job)
+  search_loc <- sub(",", "", city)
+  search_loc <- gsub(" ", "+", search_loc)
+  
+  #### Reading landingpage
+  urls <- list()
+  
+  #### Counting Loops
+  main_page <- read_html(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc, sep = ""))
+  
+  ##### URLS
+  url <- main_page %>% 
+    html_nodes("a.data-results-content.block.job-listing-item") %>% 
+    html_attr("href")
+  urls <- append(urls, url)
+  
+  
+  #### Append Skills
+  for (i in 1:length(urls)){
+    job_posting <- read_html(paste("https://www.careerbuilder.com",urls[[i]],sep=""))
+    append_df[i,1] <- job
+    skills <- list(job_posting %>% 
+                     html_nodes(".check-bubble") %>% 
+                     html_text())
+    append_df[i,2] <- list(skills)
+    append_df[i,3] <- urls[[i]]
     closeAllConnections()
-    new_df <- rbind(new_df, append_df)
-    
-    ###### CLEANING
-    
-    new_df$Skills <- vapply(new_df$Skills, paste, collapse = ", ", character(1L))
-    
-    end_time <- Sys.time()
-    
-    print(end_time - start_time)
-    
-    return(new_df)
+  }
+  closeAllConnections()
+  new_df <- rbind(new_df, append_df)
+  
+  ###### CLEANING
+  
+  new_df$Skills <- vapply(new_df$Skills, paste, collapse = ", ", character(1L))
+  
+  end_time <- Sys.time()
+  
+  print(end_time - start_time)
+  
+  return(new_df)
 }
 detailscrape <- function(job,city){
     
@@ -225,4 +227,14 @@ get_lat <- function(hascoords, needscoords){
     needscoords$lat <- hascoords$lat[cbind(
         match(tolower(needscoords$Location), tolower(hascoords$Location)))]
     return(needscoords$lat)
+}
+
+
+
+merged_df <- function(){
+  dfdet <- jobdetails()
+  dfskill <- jobskills()
+  merged_df <- dfdet
+  merged_df$skills <- dfskil$Skills[cbind(
+    match(merged_df$urls, dfskil$urls))]
 }
