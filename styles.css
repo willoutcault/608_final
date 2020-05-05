@@ -9,17 +9,20 @@ h1 {
   color: #ad1d28;
 }
 
-#search_bar {
+#search_bar.search_bar_panel {
   width: 100%;
-  padding-top: 8%
+  padding-top: 8%;
 }
 
 .form-group.shiny-input-containter {
-  padding-top:
-   margin:auto
+  margin:auto;
 }
-#locat
-ion, #job {
+
+#location.form-control.shiny-bound-input {
+  text-align: center;
+}
+
+#job.form-control.shiny-bound-input {
   text-align: center;
 }
 
