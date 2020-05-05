@@ -9,6 +9,15 @@ h1 {
   color: #ad1d28;
 }
 
+h4 {
+  font-family: 'Lobster', cursive;
+  text-align: center;
+  padding-bottom: 5%;
+  font-weight: 500;
+  line-height: 1.1;
+  color: #ad1d28;
+}
+
 #search_bar.search_bar_panel {
   width: 100%;
   padding-top: 8%;
