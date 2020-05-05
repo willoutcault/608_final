@@ -2,6 +2,7 @@
 
 h1 {
   font-family: 'Lobster', cursive;
+  text
   text-align: center;
   padding-bottom: 5%;
   font-weight: 500;
@@ -9,9 +10,17 @@ h1 {
   color: #ad1d28;
 }
 
+div.col-sm-12 {
+  width: 35%;
+  height: 200px;
+  border-radius: 0 0 50% 50%;
+  background-color:#dddddd;
+
 div#search_bar.search_bar_panel {
-  width: 100%;
-  padding-top: 8%;
+  margin-left: 29%;
+  padding-top: 4%;
+  position:absolute;
+  width: 60%;
 }
 
 .form-group.shiny-input-containter {
