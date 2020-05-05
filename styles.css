@@ -24,11 +24,6 @@ h4 {
 div.form-group {
   margin-left:35%;
 
-div.col-sm-8 {
-  width: 100%;
-  background-color: transparent;
-}
-
 div.col-sm-6 {
   width: 40%;
   margin-right:30%;
@@ -37,7 +32,7 @@ div.col-sm-6 {
   background-color: #dddddd;
 }
 
-div.col-sm-12 {
+div.col-sm-8 {
   width: 40%; 
   border-bottom-left-radius: 110px;  /* 100px of height + 10px of border */
   border-bottom-right-radius: 110px;
