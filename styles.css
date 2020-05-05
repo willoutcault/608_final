@@ -11,17 +11,9 @@ h1 {
 }
 
 div.col-sm-12 {
-  width: 35%;
-  height: 200px;
+
   border-radius: 0 0 50% 50%;
   background-color:#dddddd;
-
-div#search_bar.search_bar_panel {
-  margin-left: 29%;
-  padding-top: 4%;
-  position:absolute;
-  width: 60%;
-}
 
 .form-group.shiny-input-containter {
   margin:auto;
