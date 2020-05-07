@@ -1,13 +1,15 @@
 require(dplyr)
+require(curl)
 require(tidyr)
 require(stringr)
 require(rvest)
 require(shiny)
 require(leaflet)
-require(shinythemes)
 require(ggplot2)
 require(shinydashboard)
 require(DT)
+require(scales)
+require(shinyhttr)
 coords <- read.csv('https://raw.githubusercontent.com/willoutcault/608_final/master/us_cities.csv', TRUE, ",")
 source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools.R")
 
@@ -61,12 +63,14 @@ ui <- dashboardPage(
     body
 )
 
+
 server <- function(input,output){
     
     
     #skills and details
     
     jobskills <- eventReactive(input$go, {
+
         skillscrape(input$job, input$location)
     })
     
@@ -76,44 +80,53 @@ server <- function(input,output){
     })
     
     
-    
     output$plot1<- renderPlot({
         
-        ggplot(count_skills(jobskills())[1:10,], aes(x=reorder(skills, n),y=n, label="count")) +
+        ggplot(count_skills(jobskills())[1:10,], aes(x=reorder(skills, n),y=(n/sum(n)), label="count")) +
             geom_bar(stat='identity', width=.5, fill = "lightblue", color = "darkblue") +
             scale_fill_manual(name="Data Analyst Skills") + 
             coord_flip()+
-            theme(axis.title.x=element_blank(),
-                  axis.text.x=element_blank(),
-                  axis.ticks.x=element_blank())+
-            xlab("Skill")
+            labs(title="Top 10 Skills", 
+                 subtitle="Based Off % Demand") +
+            theme(axis.title.x = element_blank(),
+                  axis.title.y = element_blank(),
+                  text = element_text(size=12)) +
+            scale_y_continuous(labels = scales::percent) +
+            scale_x_discrete(position = "left")
         
-    }, height = 200, width = 375)
+        
+    }, height = 208, width = 425)
     
     output$plot2<- renderPlot({
         
         ggplot(count_wages(jobdetails()), aes(x=salary))+
             geom_density(color="darkblue", fill="lightblue")+
             geom_vline(aes(xintercept=mean(salary)),color="blue", linetype="dashed", size=1)+
-            xlab("Salary (thousands)")+
-            theme(axis.title.y=element_blank(),
-                  axis.text.y=element_blank(),
-                  axis.ticks.y=element_blank())
+            labs(title="Salary Distribution") +
+            theme(axis.title.x = element_blank(),
+                  axis.title.y = element_blank(),
+                  axis.text.y = element_blank(),
+                  axis.ticks.y = element_blank()) +
+            scale_x_continuous(labels = scales::dollar_format(prefix="$"))
         
-    }, height = 200, width = 375)
+            
+    }, height = 208, width = 425)
     
     output$plot3<- renderPlot({
         
-        ggplot(count_location(jobdetails())[1:10,], aes(x=reorder(Location, n),y=n, label="count")) +
+        ggplot(count_location(jobdetails())[1:10,], aes(x=reorder(Location, n),y=(n/sum(n)), label="count")) +
             geom_bar(stat='identity', width=.5, fill = "lightblue", color = "darkblue")  +
             scale_fill_manual(name="Cities Hiring") + 
             coord_flip()+
-            xlab("City")+
-            theme(axis.title.x=element_blank(),
-                  axis.text.x=element_blank(),
-                  axis.ticks.x=element_blank())
+            labs(title="Top 10 Cities", 
+                 subtitle="Based Off Total Open Positions") +
+            theme(axis.title.x = element_blank(),
+                  axis.title.y = element_blank(),
+                  text = element_text(size=12)) +
+            scale_y_continuous(labels = scales::percent) +
+            scale_x_discrete(position = "left")
         
-    }, height = 200, width =375)
+    }, height = 208, width =425)
     
     output$map <- renderLeaflet({
         coordsdf <- count_location(jobdetails())
@@ -121,6 +134,7 @@ server <- function(input,output){
         coordsdf$lng <- get_lng(coords,coordsdf)
         leaflet(coordsdf) %>%
             addTiles() %>%
+            addProviderTiles(providers$Esri.WorldTopoMap) %>% 
             addCircles(lat = ~lat,
                        lng = ~lng,
                        weight = 1,
@@ -130,7 +144,7 @@ server <- function(input,output){
     })
     
     output$jobPositionsTable <- renderDataTable({
-        positions <- select(jobdetails(), Title, Location, Salary, urls)
+        positions <- select(jobdetails(), Title, Company, Location, Salary, urls)
         positions <- cbind("(index)" = 1:nrow(positions), positions)
         positions$Salary <- paste0("$", formatC(as.numeric(positions$Salary), format="f", digits=2, big.mark=","))
         positions$Salary[positions$Salary=="$ NA"] <- 'N/A'
