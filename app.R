@@ -6,11 +6,11 @@ require(shiny)
 require(leaflet)
 require(shinythemes)
 require(ggplot2)
-require(shinyWidgets)
 require(shinydashboard)
 require(DT)
-source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools.R")
 coords <- read.csv('https://raw.githubusercontent.com/willoutcault/608_final/master/us_cities.csv', TRUE, ",")
+source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools.R")
+
 
 header <- dashboardHeader(
     title = "Job Board"
@@ -45,9 +45,9 @@ body <- dashboardBody(
                    actionButton("go", "Search"),
                ),
                box(width = NULL, status = "warning",
-                   plotOutput("plot1"),
-                   plotOutput("plot2"),
-                   plotOutput("plot3"),
+                   plotOutput("plot1",  height = "50%"),
+                   plotOutput("plot2",  height = "50%"),
+                   plotOutput("plot3",  height = "50%"),
                    p(class = "text-muted"
                    )
                )
@@ -88,7 +88,7 @@ server <- function(input,output){
                   axis.ticks.x=element_blank())+
             xlab("Skill")
         
-    })
+    }, height = 200, width = 375)
     
     output$plot2<- renderPlot({
         
@@ -100,7 +100,7 @@ server <- function(input,output){
                   axis.text.y=element_blank(),
                   axis.ticks.y=element_blank())
         
-    })
+    }, height = 200, width = 375)
     
     output$plot3<- renderPlot({
         
@@ -113,7 +113,7 @@ server <- function(input,output){
                   axis.text.x=element_blank(),
                   axis.ticks.x=element_blank())
         
-    })
+    }, height = 200, width =375)
     
     output$map <- renderLeaflet({
         coordsdf <- count_location(jobdetails())
@@ -143,6 +143,5 @@ server <- function(input,output){
     
     closeAllConnections()
 }
-
 
 shinyApp(ui = ui, server = server)
