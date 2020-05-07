@@ -1,47 +1,6 @@
 @import url("//fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
 
-div.box-body {
+div.logo {
   font-family: 'Lobster', cursive;
-  margin-top: 5px;
-  font-size: 42px;
-  font-weight: 500;
-  line-height: 1.1;
-  color: #ad1d28;
 }
   
-div.form-control {
-  font-family: Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-}
-
-h4 {
-  font-family: 'Lobster', cursive;
-  font-size: 30px;
-  background-color: #dddddd;
-  text-align: center;
-  font-weight: 500;
-  line-height: 1.1;
-  color: #ad1d28;
-  margin-bottom: 0px;
-}
-
-/*div.col-sm-6 {
-  width: 40%;
-  margin-right:30%;
-  margin-left:30%;
-  padding: 0;
-  background-color: #dddddd;
-}
-
-div.col-sm-8 {
-  width: 40%; 
-  border-bottom-left-radius: 110px;
-  border-bottom-right-radius: 110px;
-  background-color: #dddddd;
-  margin-left:30%;
-  margin-right:30%;
-  padding-bottom:5%;
-  padding-right:5%;
-  padding-left:15%;
-} */
-
