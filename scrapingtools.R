@@ -126,7 +126,7 @@ detailscrape <- function(job,city){
         append_df[i,2] <- titles[[i]]
         append_df[i,3] <- details[[i]]
         append_df[i,4] <- salaries[[i]]
-        append_df[i,5] <- urls[[i]]
+        append_df[i,5] <- paste("https://www.careerbuilder.com", urls[[i]], sep = "")
     }
     
     new_df <- rbind(new_df, append_df)
@@ -231,10 +231,6 @@ get_lat <- function(hascoords, needscoords){
 
 
 
-merged_df <- function(){
-  dfdet <- jobdetails()
-  dfskill <- jobskills()
-  merged_df <- dfdet
-  merged_df$skills <- dfskil$Skills[cbind(
-    match(merged_df$urls, dfskil$urls))]
-}
+
+
+
