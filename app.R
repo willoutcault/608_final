@@ -89,7 +89,7 @@ server <- function(input,output){
             xlab("Skill")
         
     })
-
+    
     output$plot2<- renderPlot({
         
         ggplot(count_wages(jobdetails()), aes(x=salary))+
@@ -101,7 +101,7 @@ server <- function(input,output){
                   axis.ticks.y=element_blank())
         
     })
-
+    
     output$plot3<- renderPlot({
         
         ggplot(count_location(jobdetails())[1:10,], aes(x=reorder(Location, n),y=n, label="count")) +
@@ -114,7 +114,7 @@ server <- function(input,output){
                   axis.ticks.x=element_blank())
         
     })
-
+    
     output$map <- renderLeaflet({
         coordsdf <- count_location(jobdetails())
         coordsdf$lat <- get_lat(coords,coordsdf)
@@ -122,28 +122,22 @@ server <- function(input,output){
         leaflet(coordsdf) %>%
             addTiles() %>%
             addCircles(lat = ~lat,
-                             lng = ~lng,
-                             weight = 1,
-                             popup = paste("<b>Job Count: </b>",coordsdf$n,"<br>","<b>City: </b>",coordsdf$Location),
-                             radius = ~ sqrt(n)*1000)
+                       lng = ~lng,
+                       weight = 1,
+                       popup = paste("<b>Job Count: </b>",coordsdf$n,"<br>","<b>City: </b>",coordsdf$Location),
+                       radius = ~ sqrt(n)*1000)
         
     })
-
+    
     output$jobPositionsTable <- renderDataTable({
-        dfdet <- jobdetails()
-        dfskill <- jobskills()
-        merged_df <- dfdet
-        merged_df$Skills <- dfskill$Skills[cbind(
-            match(merged_df$urls, dfskill$urls))]
-        positions <- select(merged_df, Title, Location, Salary, Skills)
+        positions <- select(jobdetails(), Title, Location, Salary, urls)
         positions <- cbind("(index)" = 1:nrow(positions), positions)
-        if (nrow(positions) == 0)
-            return(NULL)
-        
+        positions$Salary <- paste0("$", formatC(as.numeric(positions$Salary), format="f", digits=2, big.mark=","))
+        positions$Salary[positions$Salary=="$ NA"] <- 'N/A'
         datatable(positions, options = list(paging = FALSE, scrollY = "225px"), rownames = FALSE)
     })
-
-
+    
+    
     
     
     
