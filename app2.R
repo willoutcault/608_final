@@ -10,10 +10,11 @@ require(shinydashboard)
 require(DT)
 require(scales)
 require(shinycssloaders)
+require(doSNOW)
+require(foreach)
 coords <- read.csv('https://raw.githubusercontent.com/willoutcault/608_final/master/us_cities.csv', TRUE, ",")
-source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools2.R")
+#source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools2.R")
 
-df <- detailscrape('data analyst', 'new york, ny')
 header <- dashboardHeader(
   title = "Job Board"
 )
@@ -155,4 +156,3 @@ server <- function(input,output){
 }
 
 shinyApp(ui = ui, server = server)
-
