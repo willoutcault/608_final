@@ -26,9 +26,9 @@ detailscrape <- function(job,city){
     html_text()
   count <- as.numeric(as.character(str_remove_all(count, "[^[:digit:]]")))
   loop_count <- round(count/25)
-  #if (loop_count > 15){
-  #  loop_count <- 15
-  #}
+  if (loop_count > 10){
+    loop_count <- 10
+  }
   
   for (i in 1:loop_count){
     page <- paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc,"&page_number=",i, sep = "")
@@ -93,8 +93,6 @@ detailscrape <- function(job,city){
   
   new_df <- do.call("rbind", new_df)
   
-  new_df <- filter(new_df, str_detect(tolower(Title),tolower(job)))
-  
   cluster = makeCluster(2, type = "SOCK")
   registerDoSNOW(cluster)
   read_posting_url <- function(df_urls){
@@ -106,7 +104,9 @@ detailscrape <- function(job,city){
     return(list(skills))    
   }
 
-  skills_list <- foreach(i = 1:length(new_df$urls)) %dopar% read_posting_url(new_df$urls[i])
+  ifelse(loop_count > 3, job_posting_count <- 3*25, job_posting_count <- round((length(new_df$urls)/loop_count)*2))
+  
+  skills_list <- foreach(i = 1:job_posting_count) %dopar% read_posting_url(new_df$urls[i])
   stopCluster(cluster)
   
   for (i in 1:length(skills_list)){
