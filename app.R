@@ -9,7 +9,7 @@ require(ggplot2)
 require(shinydashboard)
 require(DT)
 require(scales)
-require(shinyhttr)
+require(shinycssloaders)
 coords <- read.csv('https://raw.githubusercontent.com/willoutcault/608_final/master/us_cities.csv', TRUE, ",")
 source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools.R")
 
@@ -19,10 +19,11 @@ header <- dashboardHeader(
 )
 
 body <- dashboardBody(
+    includeCSS("https://raw.githubusercontent.com/willoutcault/608_final/master/styles.css"),
     fluidRow(
         column(width = 9,
                box(width = NULL, solidHeader = TRUE,
-                   leafletOutput("map", height = 500)
+                   leafletOutput("map", height = 471) %>% withSpinner(color="#0dc5c1")
                ),
                box(width = NULL,
                    DT::dataTableOutput("jobPositionsTable"),
@@ -90,12 +91,12 @@ server <- function(input,output){
                  subtitle="Based Off % Demand") +
             theme(axis.title.x = element_blank(),
                   axis.title.y = element_blank(),
-                  text = element_text(size=12)) +
+                  text = element_text(size=13)) +
             scale_y_continuous(labels = scales::percent) +
             scale_x_discrete(position = "left")
         
         
-    }, height = 208, width = 425)
+    }, height = 198, width = 425)
     
     output$plot2<- renderPlot({
         
@@ -110,7 +111,7 @@ server <- function(input,output){
             scale_x_continuous(labels = scales::dollar_format(prefix="$"))
         
             
-    }, height = 208, width = 425)
+    }, height = 198, width = 425)
     
     output$plot3<- renderPlot({
         
@@ -122,11 +123,11 @@ server <- function(input,output){
                  subtitle="Based Off Total Open Positions") +
             theme(axis.title.x = element_blank(),
                   axis.title.y = element_blank(),
-                  text = element_text(size=12)) +
+                  text = element_text(size=13)) +
             scale_y_continuous(labels = scales::percent) +
             scale_x_discrete(position = "left")
         
-    }, height = 208, width =425)
+    }, height = 198, width =425)
     
     output$map <- renderLeaflet({
         coordsdf <- count_location(jobdetails())
