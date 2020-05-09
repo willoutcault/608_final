@@ -139,7 +139,7 @@ server <- function(input,output){
                                "<b>City: </b>",coordsdf$Location,"<br>", 
                                "<b>Salary: </b>",coordsdf$Salary, "<br>",
                                "<b>Skills: </b>", coordsdf$Skills),
-                 radius = ~ sqrt(Job_Count)*1250
+                 radius = ~ sqrt(Job_Count)*1250)
     
   })
   
