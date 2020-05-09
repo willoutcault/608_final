@@ -126,17 +126,19 @@ server <- function(input,output){
   }, height = 198, width =425)
   
   output$map <- renderLeaflet({
-    coordsdf <- count_location(jobdetails())
-    coordsdf$lat <- get_lat(coords,coordsdf)
-    coordsdf$lng <- get_lng(coords,coordsdf)
+    df2 <- count_skills_by_loc(jobdetails())
+    coordsdf <- leaflet_points(jobdetails(),df2, coords)
     leaflet(coordsdf) %>%
       addTiles() %>%
       addProviderTiles(providers$Esri.WorldTopoMap) %>% 
       addCircles(lat = ~lat,
                  lng = ~lng,
                  weight = 1,
-                 popup = paste("<b>Job Count: </b>",coordsdf$n,"<br>","<b>City: </b>",coordsdf$Location),
-                 radius = ~ sqrt(n)*1000)
+                 popup = paste("<b>Job Count: </b>",coordsdf$Job_Count,"<br>",
+                               "<b>City: </b>",coordsdf$Location,"<br>", 
+                               "<b>Salary: </b>",coordsdf$Salary, "<br>",
+                               "<b>Skills: </b>", coordsdf$Skills),
+                 radius = ~ sqrt(Job_Count)*1000)
     
   })
   
