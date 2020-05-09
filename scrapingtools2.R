@@ -202,20 +202,31 @@ leaflet_points <- function(df,df2, coords){
 count_skills_by_loc <- function(df){
     test <- df %>% 
         separate(Skills, c("S1", "S2", "S3", "S4", "S5", "S6"), sep=", ", fill="right") %>% 
-       select(S1,S2,S3,S4,S5,S6,Location) %>% 
+        select(S1,S2,S3,S4,S5,S6,Location) %>% 
         group_by(Location) %>% 
         gather("Count", "Skills", -Location)  %>% 
         group_by(Location, Skills) %>% 
         summarise(n = n()) %>% 
         filter((Skills != "") & (!is.na(Skills))) %>% 
         group_by(Location) %>% 
-        summarize(skills=list(Skills))
-        test$skills <- vapply(test$skills, paste, collapse = ", ", character(1L))
+        arrange(desc(n), Location) %>%
+        filter(row_number()<4) %>% 
+        group_by(Location) %>%
+        summarize(list(Skills))
+    
+    test <- by(test, test["Location"], head, n=3)
+    
+    
+    
+    test <- Reduce(rbind, test)
+    
+    
+    
+    test$skills <- vapply(test$Skills, paste, collapse = ", ", character(1L))
+    
     return(test)
 }
 
-test <- count_skills_by_loc(df)
-leaflet_points(df,test,coords)
 
 count_wages <- function(df){
   dswages <- df %>%
