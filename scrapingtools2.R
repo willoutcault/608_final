@@ -179,7 +179,7 @@ count_skills <- function(df){
 
 leaflet_points <- function(df,df2, coords){
   
-  skills_df <- count_skills_loc(df)
+  skills_df <- count_skills_by_loc(df)
   
   locations_df <- df %>% 
     group_by(Location) %>% 
