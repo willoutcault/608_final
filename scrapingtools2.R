@@ -185,7 +185,7 @@ leaflet_points <- function(df,df2, coords){
     group_by(Location) %>% 
     summarise(Job_Count = n(), Salary = mean(Salary)) 
   
-  locations_df$Skills <- skills_df$list(Skills)[cbind(
+  locations_df$Skills <- skills_df$`list(Skills)`[cbind(
     match(locations_df$Location, skills_df$Location))]
   
   locations_df$lat <- coords$lat[cbind(
@@ -235,3 +235,4 @@ count_location <- function(df){
   Locations <- Locations[with(Locations,order(-n)),]
   return(Locations)
 }
+
