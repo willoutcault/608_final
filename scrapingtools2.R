@@ -196,6 +196,16 @@ leaflet_points <- function(df,df2, coords){
   
   locations_df <- filter(locations_df, !is.na(lng))
   
+  locations_df$type <- 0
+  
+  locations_df$type[!is.na(locations_df$Salary)] <- 1
+
+  locations_df$type[locations_df$Skills!="NULL"] <- 2
+
+  locations_df$type[(locations_df$Skills!="NULL") & (!is.na(locations_df$Salary))] <- 3
+  
+  locations_df$Skills <- vapply(locations_df$Skills, paste, collapse = ", ", character(1L))
+  
   return(locations_df)
 }
 
