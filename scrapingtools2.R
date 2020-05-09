@@ -26,7 +26,7 @@ detailscrape <- function(job,city){
     html_text()
   count <- as.numeric(as.character(str_remove_all(count, "[^[:digit:]]")))
   loop_count <- round(count/25)
-  if (loop_count < 8){
+  if (loop_count > 8){
     loop_count <- 8
   }
   
