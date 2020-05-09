@@ -26,8 +26,8 @@ detailscrape <- function(job,city){
     html_text()
   count <- as.numeric(as.character(str_remove_all(count, "[^[:digit:]]")))
   loop_count <- round(count/25)
-  if (loop_count > 8){
-    loop_count <- 8
+  if (loop_count > 10){
+    loop_count <- 10
   }
   
   for (i in 1:loop_count){
@@ -103,7 +103,7 @@ detailscrape <- function(job,city){
                      html_text())
     return(list(skills))    
   }
-  ifelse(loop_count > 2, job_posting_count <- 50, job_posting_count <- length(new_df$urls))
+  ifelse(loop_count > 1, job_posting_count <- 25, job_posting_count <- length(new_df$urls))
   skills_list <- foreach(i = 1:job_posting_count) %dopar% try(read_posting_url(new_df$urls[i]))
   stopCluster(cluster)
   
