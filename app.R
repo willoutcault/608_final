@@ -24,7 +24,7 @@ body <- dashboardBody(
   fluidRow(
     column(width = 9,
            box(width = NULL, solidHeader = TRUE,
-               leafletOutput("map", height = 471) %>% withSpinner(color="#0dc5c1")
+               leafletOutput("map", height = 471) %>% withSpinner(color="#3c8dbc")
            ),
            box(width = NULL,
                DT::dataTableOutput("jobPositionsTable")
