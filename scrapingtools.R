@@ -243,5 +243,6 @@ count_location <- function(df){
     count(Location) %>%
     filter(!is.na(Location) & Location != " " & Location != "" & Location != "Full Time" & Location != "Contractor" & Location != "NA")
   Locations <- Locations[with(Locations,order(-n)),]
+  Locations <- filter(Locations, row_number()<11)
   return(Locations)
 }
