@@ -214,16 +214,6 @@ count_skills_by_loc <- function(df){
         group_by(Location) %>%
         summarize(list(Skills))
     
-    test <- by(test, test["Location"], head, n=3)
-    
-    
-    
-    test <- Reduce(rbind, test)
-    
-    
-    
-    test$skills <- vapply(test$Skills, paste, collapse = ", ", character(1L))
-    
     return(test)
 }
 
