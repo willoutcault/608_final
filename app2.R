@@ -13,7 +13,7 @@ require(shinycssloaders)
 require(doSNOW)
 require(foreach)
 coords <- read.csv('https://raw.githubusercontent.com/willoutcault/608_final/master/us_cities.csv', TRUE, ",")
-source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools2.R")
+#source("https://raw.githubusercontent.com/willoutcault/608_final/master/scrapingtools2.R")
 
 header <- dashboardHeader(
   title = "Job Board"
@@ -128,17 +128,23 @@ server <- function(input,output){
   output$map <- renderLeaflet({
     df2 <- count_skills_by_loc(jobdetails())
     coordsdf <- leaflet_points(jobdetails(),df2, coords)
+    pal <- colorFactor(
+      palette = c('gray', 'orange', 'blue', 'purple'),
+      domain = coordsdf$type
+    )
     leaflet(coordsdf) %>%
       addTiles() %>%
+      fitBounds(~min(lng), ~min(lat), ~max(lng), ~max(lat)) %>% 
       addProviderTiles(providers$Esri.WorldTopoMap) %>% 
       addCircles(lat = ~lat,
                  lng = ~lng,
-                 weight = 1,
+                 weight = 2,
                  popup = paste("<b>Job Count: </b>",coordsdf$Job_Count,"<br>",
                                "<b>City: </b>",coordsdf$Location,"<br>", 
                                "<b>Salary: </b>",coordsdf$Salary, "<br>",
                                "<b>Skills: </b>", coordsdf$Skills),
-                 radius = ~ sqrt(Job_Count)*1000)
+                 radius = ~ sqrt(Job_Count)*1000,
+                 color = ~pal(type))
     
   })
   
