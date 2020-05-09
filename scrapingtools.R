@@ -231,7 +231,7 @@ count_skills_by_loc <- function(df){
 count_wages <- function(df){
   dswages <- df %>%
     count(Salary) %>%
-    filter(Salary != "null" & Salary != " " & Salary != "" & Salary < 700000)
+    filter(Salary != "null" & Salary != " " & Salary != "" & Salary < 700000 & Salary > 15000)
   dswages$salary <- as.numeric(dswages$Salary)
   outliers <- boxplot(dswages$salary, plot=FALSE)$out
   dswages <- dswages[!dswages$salary %in% outliers,]
