@@ -128,10 +128,6 @@ server <- function(input,output){
   output$map <- renderLeaflet({
     df2 <- count_skills_by_loc(jobdetails())
     coordsdf <- leaflet_points(jobdetails(),df2, coords)
-    pal <- colorFactor(
-      palette = c('gray', 'orange', 'blue', 'purple'),
-      domain = coordsdf$type
-    )
     leaflet(coordsdf) %>%
       addTiles() %>%
       fitBounds(~min(lng), ~min(lat), ~max(lng), ~max(lat)) %>% 
@@ -143,8 +139,7 @@ server <- function(input,output){
                                "<b>City: </b>",coordsdf$Location,"<br>", 
                                "<b>Salary: </b>",coordsdf$Salary, "<br>",
                                "<b>Skills: </b>", coordsdf$Skills),
-                 radius = ~ sqrt(Job_Count)*1250,
-                 color = ~pal(type))
+                 radius = ~ sqrt(Job_Count)*1250
     
   })
   
