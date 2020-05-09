@@ -111,7 +111,7 @@ server <- function(input,output){
   
   output$plot3<- renderPlot({
     
-    ggplot(count_location(jobdetails())[1:10,], aes(x=reorder(Location, n),y=(n/sum(n)), label="count")) +
+    ggplot(count_location(jobdetails()), aes(x=reorder(Location, n),y=(n/sum(n)), label="count")) +
       geom_bar(stat='identity', width=.5, fill = "lightblue", color = "darkblue")  +
       scale_fill_manual(name="Cities Hiring") + 
       coord_flip()+
