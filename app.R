@@ -92,7 +92,7 @@ server <- function(input,output){
             scale_x_discrete(position = "left")
         
         
-    }, height = 188, width = 425)
+    }, height = 188)
     
     output$plot2<- renderPlot({
         
@@ -107,7 +107,7 @@ server <- function(input,output){
             scale_x_continuous(labels = scales::dollar_format(prefix="$"))
         
         
-    }, height = 188, width = 425)
+    }, height = 188)
     
     output$plot3<- renderPlot({
         
@@ -123,7 +123,7 @@ server <- function(input,output){
             scale_y_continuous(labels = scales::percent) +
             scale_x_discrete(position = "left")
         
-    }, height = 188, width =425)
+    }, height = 188)
     
     output$map <- renderLeaflet({
         df2 <- count_skills_by_loc(jobdetails())
