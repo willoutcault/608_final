@@ -22,7 +22,7 @@ header <- dashboardHeader(
 body <- dashboardBody(
     includeCSS("https://raw.githubusercontent.com/willoutcault/608_final/master/styles.css"),
     fluidRow(
-        column(width = 9,
+        column(width = 8,
                box(width = NULL, solidHeader = TRUE,
                    leafletOutput("map", height = 441) %>% withSpinner(color="#3c8dbc")
                ),
@@ -30,7 +30,7 @@ body <- dashboardBody(
                    DT::dataTableOutput("jobPositionsTable")
                )
         ),
-        column(width = 3,
+        column(width = 4,
                box(width = NULL, status = "warning",
                    textInput("job", label= NULL, value="", placeholder="Job Title, Skill, Industry"),
                    
