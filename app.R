@@ -88,8 +88,7 @@ server <- function(input,output){
             theme(axis.title.x = element_blank(),
                   axis.title.y = element_blank(),
                   text = element_text(size=13)) +
-            scale_y_continuous(labels = scales::percent) +
-            scale_x_discrete(position = "left")
+            scale_y_continuous(labels = scales::percent)
         
         
     }, height = 188)
@@ -120,8 +119,7 @@ server <- function(input,output){
             theme(axis.title.x = element_blank(),
                   axis.title.y = element_blank(),
                   text = element_text(size=13)) +
-            scale_y_continuous(labels = scales::percent) +
-            scale_x_discrete(position = "left")
+            scale_y_continuous(labels = scales::percent)
         
     }, height = 188)
     
