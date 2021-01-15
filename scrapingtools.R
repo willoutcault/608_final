@@ -1,5 +1,5 @@
 detailscrape <- function(job,city){
-
+  
   time2 = proc.time()
   
   #### Initialize df
@@ -53,7 +53,7 @@ detailscrape <- function(job,city){
     
     library(rvest)
     
-    page_url <- read_html(html_session(pages[[2]]))
+    page_url <- read_html(html_session(pages))
     
     ##### URLS
     urls <- page_url %>% 
@@ -163,6 +163,8 @@ detailscrape <- function(job,city){
   new_df <- new_df[ , !(names(new_df) %in% drops)]
   
   print(proc.time()-time2)
+  
+  new_df <- unique(new_df)
   
   return(new_df)
 }
