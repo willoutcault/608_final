@@ -1,5 +1,5 @@
 detailscrape <- function(job,city){
-  
+
   time2 = proc.time()
   
   #### Initialize df
@@ -17,7 +17,7 @@ detailscrape <- function(job,city){
   
   #### Reading landingpage
   pages <- list()
- 
+  
   #### Counting Loops
   main_page <- html_session(paste("https://www.careerbuilder.com/jobs?keywords=",search_job,"&location=",search_loc, sep = ""))
   main_page <- read_html(main_page)
@@ -26,8 +26,8 @@ detailscrape <- function(job,city){
     html_text()
   count <- as.numeric(as.character(str_remove_all(count, "[^[:digit:]]")))
   loop_count <- round(count/25)
-  if (loop_count > 10){
-    loop_count <- 10
+  if (loop_count > 20){
+    loop_count <- 20
   }
   
   for (i in 1:loop_count){
@@ -37,7 +37,10 @@ detailscrape <- function(job,city){
   
   cluster = makeCluster(2, type = "SOCK")
   registerDoSNOW(cluster)
+  
   read_page_url <- function(pages, job){
+    
+    pages <- pages[[1]]
     
     details <- list()
     titles <- list()
@@ -50,50 +53,44 @@ detailscrape <- function(job,city){
     
     library(rvest)
     
-    for (i in seq(1, length(pages), 1)){
-      
-      page_url <- read_html(html_session(pages[[i]]))
-      
-      ##### URLS
-      url <- page_url %>% 
-        html_nodes("a.data-results-content.block.job-listing-item") %>% 
-        html_attr("href")
-      urls <- append(urls, url)
-      
-      ##### Titles
-      title <- page_url %>% 
-        html_nodes("div#jobs_collection div.data-results-title.dark-blue-text.b") %>% 
-        html_text()
-      titles <- append(titles, title)
-      
-      ##### Details
-      detail <- page_url %>% 
-        html_nodes("div#jobs_collection div.data-details") %>% 
-        html_text()
-      details <- append(details, detail)
-      
-      ##### Salary
-      salary <- page_url %>% 
-        html_nodes("div#jobs_collection div.data-snapshot div.block:last-child") %>%
-        html_text()
-      salaries <- append(salaries, salary) 
-      
-      print(i)
-    }
+    page_url <- read_html(html_session(pages[[2]]))
     
-    for (i in 1:length(titles)){
-      append_df[i,1] <- job[[i]]
+    ##### URLS
+    urls <- page_url %>% 
+      html_nodes("a.data-results-content.block.job-listing-item") %>% 
+      html_attr("href")
+      
+    ##### Titles
+    title <- page_url %>% 
+      html_nodes(".data-results-title") %>% 
+      html_text()
+    titles <- append(titles, title[5:length(title)])
+    
+    ##### Details
+    detail <- page_url %>% 
+      html_nodes(".data-details") %>% 
+      html_text()
+    details <- append(details, detail[5:length(detail)])
+    
+    ##### Salary
+    salary <- page_url %>% 
+      html_nodes(".block:last-child") %>%
+      html_text()
+    salaries <- append(salaries, salary[5:length(salary)]) 
+    
+    for (i in 1:length(urls)){
+      append_df[i,1] <- job
       append_df[i,2] <- titles[[i]]
       append_df[i,3] <- details[[i]]
       append_df[i,4] <- salaries[[i]]
       append_df[i,5] <- ""
       append_df[i,6] <- paste("https://www.careerbuilder.com", urls[[i]], sep = "")
-      print(i)
     }
     
     return(append_df)
     
   }
+  
   new_df <- foreach(i = 1:length(pages)) %dopar% read_page_url(pages[[i]],job)
   stopCluster(cluster)
   
@@ -208,9 +205,9 @@ leaflet_points <- function(df,df2, coords){
   locations_df$type <- 0
   
   locations_df$type[!is.na(locations_df$Salary)] <- 1
-
+  
   locations_df$type[locations_df$Skills!="NULL"] <- 2
-
+  
   locations_df$type[(locations_df$Skills!="NULL") & (!is.na(locations_df$Salary))] <- 3
   
   locations_df$Skills <- vapply(locations_df$Skills, paste, collapse = ", ", character(1L))
@@ -219,22 +216,22 @@ leaflet_points <- function(df,df2, coords){
 }
 
 count_skills_by_loc <- function(df){
-    test <- df %>% 
-        separate(Skills, c("S1", "S2", "S3", "S4", "S5", "S6"), sep=", ", fill="right") %>% 
-        select(S1,S2,S3,S4,S5,S6,Location) %>% 
-        group_by(Location) %>% 
-        gather("Count", "Skills", -Location)  %>% 
-        group_by(Location, Skills) %>% 
-        summarise(n = n()) %>% 
-        filter((Skills != "") & (!is.na(Skills))) %>% 
-        group_by(Location) %>% 
-        arrange(desc(n), Location) %>%
-        filter(row_number()<4) %>% 
-        group_by(Location) %>%
-        summarize(list(Skills))
-    
-    
-    return(test)
+  test <- df %>% 
+    separate(Skills, c("S1", "S2", "S3", "S4", "S5", "S6"), sep=", ", fill="right") %>% 
+    select(S1,S2,S3,S4,S5,S6,Location) %>% 
+    group_by(Location) %>% 
+    gather("Count", "Skills", -Location)  %>% 
+    group_by(Location, Skills) %>% 
+    summarise(n = n()) %>% 
+    filter((Skills != "") & (!is.na(Skills))) %>% 
+    group_by(Location) %>% 
+    arrange(desc(n), Location) %>%
+    filter(row_number()<4) %>% 
+    group_by(Location) %>%
+    summarize(list(Skills))
+  
+  
+  return(test)
 }
 
 count_wages <- function(df){
