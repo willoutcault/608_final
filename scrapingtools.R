@@ -50,39 +50,45 @@ detailscrape <- function(job,city){
     
     library(rvest)
     
-    page_url <- read_html(html_session(pages))
+    for (i in seq(1, length(pages), 1)){
+      
+      page_url <- read_html(html_session(pages[[i]]))
+      
+      ##### URLS
+      url <- page_url %>% 
+        html_nodes("a.data-results-content.block.job-listing-item") %>% 
+        html_attr("href")
+      urls <- append(urls, url)
+      
+      ##### Titles
+      title <- page_url %>% 
+        html_nodes("div#jobs_collection div.data-results-title.dark-blue-text.b") %>% 
+        html_text()
+      titles <- append(titles, title)
+      
+      ##### Details
+      detail <- page_url %>% 
+        html_nodes("div#jobs_collection div.data-details") %>% 
+        html_text()
+      details <- append(details, detail)
+      
+      ##### Salary
+      salary <- page_url %>% 
+        html_nodes("div#jobs_collection div.data-snapshot div.block:last-child") %>%
+        html_text()
+      salaries <- append(salaries, salary) 
+      
+      print(i)
+    }
     
-    ##### URLS
-    url <- page_url %>% 
-      html_nodes("a.data-results-content.block.job-listing-item") %>% 
-      html_attr("href")
-    urls <- append(urls, url)
-    
-    ##### Titles
-    title <- page_url %>% 
-      html_nodes("div#jobs_collection div.data-results-title.dark-blue-text.b") %>% 
-      html_text()
-    titles <- append(titles, title)
-    
-    ##### Details
-    detail <- page_url %>% 
-      html_nodes("div#jobs_collection div.data-details") %>% 
-      html_text()
-    details <- append(details, detail)
-    
-    ##### Salary
-    salary <- page_url %>% 
-      html_nodes("div#jobs_collection div.data-snapshot div.block:last-child") %>%
-      html_text()
-    salaries <- append(salaries, salary)
-    
-    for (i in 1:length(urls)){
-      append_df[i,1] <- job
+    for (i in 1:length(titles)){
+      append_df[i,1] <- job[[i]]
       append_df[i,2] <- titles[[i]]
       append_df[i,3] <- details[[i]]
       append_df[i,4] <- salaries[[i]]
       append_df[i,5] <- ""
       append_df[i,6] <- paste("https://www.careerbuilder.com", urls[[i]], sep = "")
+      print(i)
     }
     
     return(append_df)
