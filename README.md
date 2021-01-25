@@ -1,4 +1,4 @@
-# 608_final
+# Job Skills Web App
 
 Link to Shinyapp ----> https://woutcault.shinyapps.io/Skill_Finder/
 
