@@ -25,7 +25,7 @@ detailscrape <- function(job,city){
     html_nodes("div#job-count.col.b.dark-blue-text") %>% 
     html_text()
   count <- as.numeric(as.character(str_remove_all(count, "[^[:digit:]]")))
-  loop_count <- round(count/25)
+  loop_count <- round(count/10)
   if (loop_count > 50){
     loop_count <- 50
   }
