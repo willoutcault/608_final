@@ -58,7 +58,6 @@ header <- dashboardHeader(
   title = "Data Warehouse"
 )
 
-# Creating the body with customized tabs
 body <- dashboardBody(
   includeCSS("https://raw.githubusercontent.com/willoutcault/608_final/master/styles.css"),
   tags$head(
@@ -86,10 +85,7 @@ body <- dashboardBody(
                    tabPanel("Engagement Over Time",
                             plotlyOutput("plot1_3", height = "250px")  # Plot 3 with plotly for interactivity
                    )
-                 ),
-                 # Slider for selecting months with dynamic labels
-                 sliderInput("months", "Select Time Period:", min = 1, max = 12, value = 3, step = 1),
-                 textOutput("selected_month_label")  # Display the selected month label with the from date
+                 )
              )
            ),
            box(width = 12, title = "Activity Feed", solidHeader = TRUE, class = "box-custom",  # Match width with custom class
@@ -99,6 +95,7 @@ body <- dashboardBody(
     column(width = 3,
            box(width = NULL, status = "warning",
                textInput("npi", label = "NPI:", placeholder = "Enter NPI"),
+               sliderInput("months", "Select Time Period (Months):", min = 1, max = 12, value = 3, step = 1),  # Moved slider under NPI input
                actionButton("go1", "Search")  # Search button to trigger updates
            ),
            box(width = NULL, title = "Metadata", solidHeader = TRUE,
@@ -118,17 +115,9 @@ ui <- dashboardPage(
 )
 
 # Server function
-# Server function
 server <- function(input, output) {
   
-  # Reactive label for the selected month
-  output$selected_month_label <- renderText({
-    today <- format(Sys.Date(), "%b %Y")  # Today's date formatted
-    selected_month <- months_labels[input$months]  # Selected month from slider
-    paste("From:", today, " - ", selected_month)
-  })
-  
-  # Reactive value to hold filtered data for activity feed
+  # Reactive value to hold filtered data for activity feed and metadata based on NPI and months slider
   data_to_display <- reactiveVal(eng_df)  # Initially set to the full dataset
   
   # Reactive value to hold metadata for the queried NPI
@@ -137,27 +126,24 @@ server <- function(input, output) {
   # Reactive value to hold filtered plot data, updated only on search
   plot_data <- reactiveVal(eng_df)  # Initially set to the full dataset
   
-  # Update data based on NPI when "Search" is clicked (affects activity feed and metadata)
+  # Update data based on NPI and slider when "Search" is clicked
   observeEvent(input$go1, {
+    start_date <- Sys.Date() %m-% months(input$months)  # Calculate start date based on slider
+    
+    # Filter data based on the selected time period and NPI
+    filtered_data <- eng_df %>%
+      filter(as.Date(date) >= start_date)  # Filter by selected months
+    
+    # Further filter by NPI if entered
     if (input$npi != "") {
-      # Filter for activity feed and metadata
-      filtered_data <- eng_df %>%
+      filtered_data <- filtered_data %>%
         filter(grepl(as.character(input$npi), as.character(NPI), ignore.case = TRUE))
-      data_to_display(filtered_data)
-      
-      # Filter for metadata
-      metadata <- met_df %>% filter(NPI == input$npi)
-      selected_metadata(metadata)
-      
-      # Update plot data based on the slider's selected number of months, excluding "P2P" engagement type
-      start_date <- Sys.Date() %m-% months(input$months)
-      plot_data(filtered_data %>% 
-                  filter(as.Date(date) >= start_date, data_source != "P2P"))  # Exclude "P2P" engagement type
-    } else {
-      # Reset if no NPI is entered
-      data_to_display(eng_df)
-      selected_metadata(NULL)
     }
+    
+    # Update data for activity feed, metadata, and plots
+    data_to_display(filtered_data)
+    selected_metadata(met_df %>% filter(NPI == input$npi))
+    plot_data(filtered_data %>% filter(data_source != "P2P"))  # Exclude "P2P" engagement type for plots
   })
   
   # Render the Activity Feed table with selected columns and sort by date
@@ -185,7 +171,7 @@ server <- function(input, output) {
         p(strong("Name:"), metadata$Name),
         p(strong("Specialty:"), metadata$Specialty),
         p(strong("Sub-Specialty:"), metadata$Sub_Specialty),
-        p(strong("Address: "), metadata$Address),
+        p(strong("Address:"), metadata$Address),
         p(strong("City:"), metadata$City),
         p(strong("State:"), metadata$State)
       )
@@ -194,7 +180,6 @@ server <- function(input, output) {
   
   # Render the Engagement Summary for the queried NPI
   output$engagement_summary <- renderUI({
-    # Get filtered engagement data for the NPI
     summary_data <- data_to_display()
     
     if (nrow(summary_data) == 0) {
